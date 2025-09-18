@@ -7,8 +7,9 @@ import { UploadArea } from './components/UploadArea';
 import { ImageCard } from './components/ImageCard';
 import { HistorySection } from './components/HistorySection';
 import { HistoryModal } from './components/HistoryModal';
-import { ClearIcon, GenerateIcon } from './components/Icons';
+import { ClearIcon, GenerateIcon, LibraryIcon } from './components/Icons';
 import { compressImage } from './utils';
+import { PromptDrawer } from './components/PromptDrawer';
 
 const PREDEFINED_PROMPTS = [
   {
@@ -128,6 +129,7 @@ const App: React.FC = () => {
   const [aspectRatioCanvas, setAspectRatioCanvas] = useState<UploadedImage | null>(null);
   const [history, setHistory] = useState<HistoryEntry[]>([]);
   const [selectedHistoryItem, setSelectedHistoryItem] = useState<HistoryEntry | null>(null);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const resultRef = useRef<HTMLDivElement>(null);
 
@@ -271,6 +273,10 @@ const App: React.FC = () => {
     setHistory([]);
   };
 
+  const handlePromptSelect = (selectedPrompt: string) => {
+    setPrompt(selectedPrompt);
+  };
+
   const resultAspectRatio = aspectRatio;
 
   return (
@@ -287,17 +293,13 @@ const App: React.FC = () => {
               <div className="space-y-4 pt-4">
                 <h2 className="text-xl font-bold text-gray-800">2. Refine o Cenário (Opcional)</h2>
                  <p className="text-sm text-gray-600">Use um prompt pré-definido para resultados incríveis ou escreva o seu.</p>
-                 <select
-                  value={prompt}
-                  onChange={(e) => setPrompt(e.target.value)}
-                  className="w-full p-3 border-2 border-[#333333] rounded-lg focus:ring-2 focus:ring-[#FFD700] focus:outline-none transition bg-white shadow-md"
+                 <button
+                    onClick={() => setIsDrawerOpen(true)}
+                    className="w-full flex items-center justify-center gap-3 text-lg font-bold bg-white text-[#4A148C] px-6 py-3 rounded-lg border-2 border-[#4A148C] shadow-md hover:shadow-lg hover:-translate-y-0.5 active:shadow-sm active:translate-y-0 transition-transform duration-150"
                  >
-                  {PREDEFINED_PROMPTS.map((p) => (
-                    <option key={p.title} value={p.prompt}>
-                      {p.title}
-                    </option>
-                  ))}
-                 </select>
+                    <LibraryIcon />
+                    Biblioteca de Estilos
+                 </button>
               </div>
 
               <div>
@@ -399,6 +401,14 @@ const App: React.FC = () => {
           <p>Criado com <span className="text-[#4A148C]">♥</span> e a magia de <span className="font-bold">NanoBanana</span>.</p>
         </footer>
       </div>
+
+      <PromptDrawer 
+        isOpen={isDrawerOpen}
+        onClose={() => setIsDrawerOpen(false)}
+        prompts={PREDEFINED_PROMPTS}
+        onSelectPrompt={handlePromptSelect}
+      />
+
       {selectedHistoryItem && (
         <HistoryModal 
           item={selectedHistoryItem}

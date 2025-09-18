@@ -1,0 +1,5 @@
+{
+  "name": "Gerador de Cenários para Produtos - NanoBanana",
+  "description": "Uma aplicação web de modificação de imagens projetada para criar fundos de alta qualidade para fotos de produtos, utilizando o modelo de IA Gemini 2.5 Flash Image Preview (nano-banana).",
+  "requestFramePermissions": []
+}
